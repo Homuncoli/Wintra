@@ -1,0 +1,3 @@
+[submodule "vendor/Logtra"]
+	path = vendor/Logtra
+	url = https://github.com/Homuncoli/Logtra.git
