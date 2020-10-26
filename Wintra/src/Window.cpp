@@ -50,6 +50,27 @@ namespace Wintra {
 				win->mouseMap[key][action]();
 	}
 
+	void refreshCallback(GLFWwindow* window) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->refreshFunction)
+			win->refreshFunction();
+	}
+
+	void focusCallback(GLFWwindow* window, int focus) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->focusFunction)
+			win->focusFunction(focus);
+	}
+
+	void posCallback(GLFWwindow* window, int x, int y) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->posFunction)
+			win->posFunction(x,y);
+	}
+
 	Window* Window::instance = nullptr;
 
 	Window::Window(int width, int height, const std::string& title) : width(width), height(height), title(title)
@@ -61,7 +82,7 @@ namespace Wintra {
 		else {
 			window = glfwCreateWindow(width, height, title.c_str(), nullptr, instance->window);
 		}
-		if (window == nullptr) {
+		if (!window) {
 			LGA_ERROR("Window could not be created; Maybe Init() was not called");
 		}
 		glfwSetWindowUserPointer(window, this);
@@ -138,6 +159,11 @@ namespace Wintra {
 	void Window::setCursorMode(const Cursor::Cursor_Mode& mode)
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, (int)mode);
+	}
+
+	void Window::enableVsync(bool enable)
+	{
+		glfwSwapInterval(enable);
 	}
 
 	void Window::setOnResize(const std::function<void(int, int)>& function)
@@ -238,6 +264,21 @@ namespace Wintra {
 		}
 	}
 
+	void Window::setRefreshCallback(std::function<void()> function)
+	{
+		refreshFunction = function;
+	}
+
+	void Window::setFocusCallback(std::function<void(int)> function)
+	{
+		focusFunction = function;
+	}
+
+	void Window::setPosCallback(std::function<void(int, int)> function)
+	{
+		posFunction = function;
+	}
+
 	void Window::setEvents()
 	{
 		glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
@@ -246,6 +287,9 @@ namespace Wintra {
 		glfwSetScrollCallback(window, scrollCallback);
 		glfwSetCursorPosCallback(window, cursorPosCallback);
 		glfwSetMouseButtonCallback(window, mouseButtonCallback);
+		glfwSetWindowRefreshCallback(window, refreshCallback);
+		glfwSetWindowFocusCallback(window, focusCallback);
+		glfwSetWindowPosCallback(window, posCallback);
 	}
 
 	void Window::update() const

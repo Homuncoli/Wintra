@@ -30,6 +30,7 @@ namespace Wintra {
 		void setCursor(Cursor& cursor);
 		void setClose(bool close);
 		void setCursorMode(const Cursor::Cursor_Mode& mode);
+		void enableVsync(bool enable);
 
 		void setOnResize(const std::function<void(int, int)>& function);
 		void setOnClose(std::function<void()> function);
@@ -41,6 +42,9 @@ namespace Wintra {
 		void setMouseButtonPress(int key, std::function<void()> function);
 		void setMouseButtonRelease(int key, std::function<void()> function);
 		void setMouseButtonHold(int key, std::function<void()> function);
+		void setRefreshCallback(std::function<void()> function);
+		void setFocusCallback(std::function<void(int)> function);
+		void setPosCallback(std::function<void(int, int)> function);
 
 		void update() const;
 		
@@ -59,6 +63,9 @@ namespace Wintra {
 		std::function<void(double, double)> scrollFunction;
 		std::function<void(double, double)> cursorPosFunction;
 		std::map<int, std::map<int, std::function<void()>>> mouseMap;
+		std::function<void()> refreshFunction;
+		std::function<void(int)> focusFunction;
+		std::function<void(int, int)> posFunction;
 		
 		static Window* instance;
 		friend void framebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -67,6 +74,10 @@ namespace Wintra {
 		friend void scrollCallback(GLFWwindow*, double, double);
 		friend void cursorPosCallback(GLFWwindow*, double, double);
 		friend void mouseButtonCallback(GLFWwindow* window, int, int, int);
+		friend void refreshCallback(GLFWwindow* window);
+		friend void focusCallback(GLFWwindow* window, int);
+		friend void posFunction(GLFWwindow* window, int, int);
+		friend void posCallback(GLFWwindow* window, int, int);
 	};
 }
 

@@ -19,6 +19,15 @@ namespace Wintra {
 		glfwSetErrorCallback(Wintra::Debug::glfwErrorCallback);
 	}
 
+	void* getProcAddress() {
+		return glfwGetProcAddress;
+	}
+
+	void setOpenGLVersion(int major, int minor) {
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+	}
+
 	void Terminate() {
 		glfwTerminate();
 		LGA_LOG("Terminated");

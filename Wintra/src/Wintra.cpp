@@ -19,6 +19,7 @@ int main()
 		LGA_USE_LOGGER(logger);
 
 		Wintra::Init();
+		Wintra::setOpenGLVersion(3, 3);
 
 		Wintra::Window title(800, 600, "Title");
 		title.setContext();
