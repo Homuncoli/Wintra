@@ -20,6 +20,36 @@ namespace Wintra {
 			win->closeFunction();
 	}
 
+	void keyCallback(GLFWwindow* window, int key, int scan, int action, int mode) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->keyMap.find(key) != win->keyMap.end())
+			if (win->keyMap[key].find(action) != win->keyMap[key].end())
+				win->keyMap[key][action]();
+	}
+
+	void scrollCallback(GLFWwindow* window, double x, double y) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->scrollFunction)
+			win->scrollFunction(x,y);
+	}
+
+	void cursorPosCallback(GLFWwindow* window, double x, double y) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->cursorPosFunction)
+			win->cursorPosFunction(x, y);
+	}
+
+	void mouseButtonCallback(GLFWwindow* window, int key, int action, int mode) {
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+		if (win->mouseMap.find(key) != win->mouseMap.end())
+			if (win->mouseMap[key].find(action) != win->mouseMap[key].end())
+				win->mouseMap[key][action]();
+	}
+
 	Window* Window::instance = nullptr;
 
 	Window::Window(int width, int height, const std::string& title) : width(width), height(height), title(title)
@@ -71,6 +101,21 @@ namespace Wintra {
 		glfwMakeContextCurrent(window);
 	}
 
+	int Window::getWidth() const
+	{
+		return width;
+	}
+
+	int Window::getHeight() const
+	{
+		return height;
+	}
+
+	float Window::getAspectRatio() const
+	{
+		return (float)width/height;
+	}
+
 	void Window::setCursor(Cursor& cursor)
 	{
 		glfwSetCursor(window, cursor.cursor);
@@ -90,6 +135,11 @@ namespace Wintra {
 		glfwSetWindowShouldClose(window, close);
 	}
 
+	void Window::setCursorMode(const Cursor::Cursor_Mode& mode)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, (int)mode);
+	}
+
 	void Window::setOnResize(const std::function<void(int, int)>& function)
 	{
 		resizeFunction = function;
@@ -100,10 +150,102 @@ namespace Wintra {
 		closeFunction = function;
 	}
 
+	void Window::setOnKeyPress(int key, std::function<void()> function)
+	{
+		if (keyMap.find(key) == keyMap.end()) {
+			keyMap.emplace(key, std::map<int, std::function<void()>>());
+		}
+		if (keyMap[key].find(GLFW_PRESS) != keyMap[key].end()) {
+			keyMap[key][GLFW_PRESS] = function;
+		}
+		else {
+			keyMap[key].emplace(GLFW_PRESS, function);
+		}
+	}
+
+	void Window::setOnKeyRelease(int key, std::function<void()> function)
+	{
+		if (keyMap.find(key) == keyMap.end()) {
+			keyMap.emplace(key, std::map<int, std::function<void()>>());
+		}
+		if (keyMap[key].find(GLFW_RELEASE) != keyMap[key].end()) {
+			keyMap[key][GLFW_RELEASE] = function;
+		}
+		else {
+			keyMap[key].emplace(GLFW_RELEASE, function);
+		}
+	}
+
+	void Window::setOnKeyHold(int key, std::function<void()> function)
+	{
+		if (keyMap.find(key) == keyMap.end()) {
+			keyMap.emplace(key, std::map<int, std::function<void()>>());
+		}
+		if (keyMap[key].find(GLFW_REPEAT) != keyMap[key].end()) {
+			keyMap[key][GLFW_REPEAT] = function;
+		}
+		else {
+			keyMap[key].emplace(GLFW_REPEAT, function);
+		}
+	}
+
+	void Window::setScrollCallback(std::function<void(double, double)> function)
+	{
+		scrollFunction = function;
+	}
+
+	void Window::setCursorPosCallback(std::function<void(double, double)> function)
+	{
+		cursorPosFunction = function;
+	}
+
+	void Window::setMouseButtonPress(int key, std::function<void()> function)
+	{
+		if (mouseMap.find(key) == mouseMap.end()) {
+			mouseMap.emplace(key, std::map<int, std::function<void()>>());
+		}
+		if (mouseMap[key].find(GLFW_PRESS) != mouseMap[key].end()) {
+			mouseMap[key][GLFW_PRESS] = function;
+		}
+		else {
+			mouseMap[key].emplace(GLFW_PRESS, function);
+		}
+	}
+
+	void Window::setMouseButtonRelease(int key, std::function<void()> function)
+	{
+		if (mouseMap.find(key) == mouseMap.end()) {
+			mouseMap.emplace(key, std::map<int, std::function<void()>>());
+		}
+		if (mouseMap[key].find(GLFW_RELEASE) != mouseMap[key].end()) {
+			mouseMap[key][GLFW_RELEASE] = function;
+		}
+		else {
+			mouseMap[key].emplace(GLFW_RELEASE, function);
+		}
+	}
+
+	void Window::setMouseButtonHold(int key, std::function<void()> function)
+	{
+		if (mouseMap.find(key) == mouseMap.end()) {
+			mouseMap.emplace(key, std::map<int, std::function<void()>>());
+		}
+		if (mouseMap[key].find(GLFW_REPEAT) != mouseMap[key].end()) {
+			mouseMap[key][GLFW_REPEAT] = function;
+		}
+		else {
+			mouseMap[key].emplace(GLFW_REPEAT, function);
+		}
+	}
+
 	void Window::setEvents()
 	{
 		glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 		glfwSetWindowCloseCallback(window, closeCallback);
+		glfwSetKeyCallback(window, keyCallback);
+		glfwSetScrollCallback(window, scrollCallback);
+		glfwSetCursorPosCallback(window, cursorPosCallback);
+		glfwSetMouseButtonCallback(window, mouseButtonCallback);
 	}
 
 	void Window::update() const

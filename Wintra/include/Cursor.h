@@ -18,6 +18,12 @@ namespace Wintra {
 			VResize = GLFW_VRESIZE_CURSOR
 		};
 
+		enum class Cursor_Mode {
+			Normal = GLFW_CURSOR_NORMAL,
+			Hidden = GLFW_CURSOR_HIDDEN,
+			Disabled = GLFW_CURSOR_DISABLED
+		};
+
 		Cursor();
 		Cursor(int width, int height, unsigned char* data, int xhot, int yhot);
 		Cursor(const Cursor_Shape& shape);
