@@ -1,3 +1,6 @@
 [submodule "vendor/Logtra"]
 	path = vendor/Logtra
 	url = https://github.com/Homuncoli/Logtra.git
+[submodule "vendor/glfw"]
+	path = vendor/glfw
+	url = https://github.com/glfw/glfw.git
