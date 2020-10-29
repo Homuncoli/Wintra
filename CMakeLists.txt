@@ -1,18 +1,18 @@
-﻿# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
+# CMakeList.txt : CMake project for Wintra, include source and define
+# project specific logic here.
 #
 cmake_minimum_required (VERSION 3.8)
 
-add_subdirectory ("vendor/Logtra")
-add_subdirectory ("vendor/glfw")
+project (Sandbox VERSION 1.0
+	DESCRIPTION "A Sandbox for Wintra"
+	LANGUAGES CXX)
 
-project ("Wintra" VERSION 1.0
-                  DESCRIPTION "A Window Library"
-                  LANGUAGES CXX)
+add_subdirectory(vendor/Wintra/)
 
-# Include sub-projects.
-add_subdirectory ("Wintra")
+# Add source to this project's executable.
+add_executable (Sandbox "src/Sandbox.cpp")
 
-target_include_directories(Wintra PUBLIC "vendor/Logtra/Logtra/include")
-target_include_directories(Wintra PUBLIC "vendor/glfw/include")
-target_include_directories(Wintra PUBLIC "vendor/Logtra/"${LGA_INCLUDE_DIRECTORIES})
+target_include_directories(Sandbox PUBLIC "vendor/Wintra/include")
+target_link_libraries     (Sandbox PUBLIC Wintra)
+
+# TODO: Add tests and install targets if needed.
