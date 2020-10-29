@@ -1,5 +1,5 @@
-#include "Cursor.h"
-#include <Logtra.h>
+#include "Wintra/Cursor.h"
+#include <Logtra/Logtra.h>
 
 namespace Wintra {
 	Cursor::Cursor() : cursor(nullptr)

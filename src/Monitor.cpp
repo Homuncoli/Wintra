@@ -1,5 +1,5 @@
-#include "Monitor.h"
-#include <Logtra.h>
+#include "Wintra/Monitor.h"
+#include <Logtra/Logtra.h>
 
 namespace Wintra {
 

@@ -4,9 +4,10 @@
 #pragma once
 
 #include <iostream>
+#include <glfw/glfw3.h>
 
-#include "Logtra.h"
-#include "Debug.h"
+#include "Logtra/Logtra.h"
+#include "Wintra/Debug.h"
 
 namespace Wintra {
 	void Init() {

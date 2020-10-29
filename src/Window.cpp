@@ -1,6 +1,6 @@
-#include "..\include\Window.h"
+#include "Wintra/Window.h"
 
-#include "Logtra.h"
+#include "Logtra/Logtra.h"
 
 namespace Wintra {
 	

@@ -7,9 +7,8 @@
 #include <map>
 #include <functional>
 
-#include "Monitor.h"
-#include <Cursor.h>
-#include <Cursor.h>
+#include "Wintra/Monitor.h"
+#include <Wintra/Cursor.h>
 
 namespace Wintra {
 
