@@ -1,7 +1,7 @@
 #ifndef WINTRA_CURSOR_H
 #define WINTRA_CURSOR_H
 
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 
 namespace Wintra {
 
